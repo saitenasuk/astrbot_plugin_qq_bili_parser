@@ -1,0 +1,68 @@
+{
+  "enable_video": {
+    "description": "启用视频解析",
+    "type": "bool",
+    "default": true,
+    "hint": "解析 bilibili.com/video/ 链接"
+  },
+  "enable_live": {
+    "description": "启用直播解析",
+    "type": "bool",
+    "default": true,
+    "hint": "解析 live.bilibili.com 链接"
+  },
+  "enable_bangumi": {
+    "description": "启用番剧解析",
+    "type": "bool",
+    "default": true,
+    "hint": "解析 bilibili.com/bangumi/ 链接"
+  },
+  "enable_article": {
+    "description": "启用专栏解析",
+    "type": "bool",
+    "default": true,
+    "hint": "解析 bilibili.com/read/ 链接"
+  },
+  "enable_audio": {
+    "description": "启用音频解析",
+    "type": "bool",
+    "default": true,
+    "hint": "解析 bilibili.com/audio/ 链接"
+  },
+  "enable_space": {
+    "description": "启用空间解析",
+    "type": "bool",
+    "default": true,
+    "hint": "解析 space.bilibili.com 链接"
+  },
+  "enable_opus": {
+    "description": "启用动态解析",
+    "type": "bool",
+    "default": true,
+    "hint": "解析 bilibili.com/opus/ 链接"
+  },
+  "parse_limit": {
+    "description": "解析上限",
+    "type": "int",
+    "default": 3,
+    "hint": "单条消息中最多解析的链接数 (1-10)"
+  },
+  "render_quality": {
+    "description": "渲染质量",
+    "type": "int",
+    "default": 90,
+    "hint": "图片渲染质量 (50-100, 仅JPEG生效)"
+  },
+  "image_format": {
+    "description": "图片格式",
+    "type": "string",
+    "default": "png",
+    "hint": "渲染输出的图片格式: png 或 jpeg"
+  },
+  "user_agent": {
+    "description": "User-Agent",
+    "type": "string",
+    "default": "",
+    "hint": "请求B站API使用的UA (留空则用默认Chrome UA)"
+  }
+}

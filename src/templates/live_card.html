@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #fff;
+    width: 100%;
+  }
+  .card {
+    width: 100%;
+    background: #fff;
+    overflow: hidden;
+  }
+  .cover-section {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #e5e7eb;
+  }
+  .cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cover-overlay {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+  }
+  .live-badge {
+    background: #ff4466;
+    color: #fff;
+    padding: 7px 18px;
+    border-radius: 10px;
+    font-size: 40px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .live-dot {
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.6); }
+  }
+  .info-section {
+    padding: 24px 24px 28px;
+  }
+  .title {
+    font-size: 64px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.35;
+    margin-bottom: 18px;
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .author-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .author-name {
+    font-size: 46px;
+    color: #4a5568;
+    font-weight: 500;
+  }
+  .desc {
+    font-size: 38px;
+    color: #4a5568;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    padding: 18px 0;
+    border-top: 1px solid #e2e8f0;
+    margin-bottom: 16px;
+  }
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 40px;
+    color: #2d3748;
+  }
+  .stat-icon {
+    font-size: 40px;
+  }
+  .stat-value {
+    font-weight: 700;
+    color: #1a202c;
+  }
+  .stat-label {
+    color: #757c85;
+    font-size: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  {% if has_cover %}
+  <div class="cover-section">
+    <img class="cover-img" src="{{ cover }}" alt="直播间封面" />
+    <div class="cover-overlay">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        {{ live_status_text }}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="info-section">
+    <div class="title">{{ title }}</div>
+
+    <div class="meta-row">
+      {% if author_face %}
+      <img class="author-avatar" src="{{ author_face }}" alt="{{ author_name }}" />
+      {% endif %}
+      <span class="author-name">{{ author_name }}</span>
+    </div>
+
+    {% if has_desc %}
+    <div class="desc">{{ desc }}</div>
+    {% endif %}
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-icon">🔥</span>
+        <span class="stat-value">{{ stat_view }}</span>
+        <span class="stat-label">人气</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">❤️</span>
+        <span class="stat-value">{{ stat_like }}</span>
+        <span class="stat-label">关注</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><title>AstrBot B站卡片预览</title></head>
+<body style="background:#edf2f7;padding:20px;">
+  <h1 style="font-family:sans-serif;color:#1a202c">📱 B站链接解析卡片预览</h1>
+  <p style="color:#a0aec0;margin-bottom:24px">修改对应 HTML 模板后刷新此页面即可看到效果</p>
+  <div class="preview-section">
+  <h2 style="color:#4a5568;margin-bottom:12px;font-family:sans-serif">视频卡片预览 — <code>video_card.html</code></h2>
+  <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #fff;
+    width: 100vw;
+  }
+  .card {
+    width: 100%;
+    background: #fff;
+    overflow: hidden;
+  }
+  .cover-section {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #e5e7eb;
+  }
+  .cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cover-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 48px 24px 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .duration-tag {
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .partition-tag {
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    padding: 5px 14px;
+    border-radius: 8px;
+    font-size: 17px;
+  }
+  .info-section {
+    padding: 24px 24px 28px;
+  }
+  .title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.35;
+    margin-bottom: 18px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .author-name {
+    font-size: 19px;
+    color: #4a5568;
+    font-weight: 500;
+  }
+  .meta-divider {
+    color: #cbd5e0;
+    font-size: 18px;
+  }
+  .date-text {
+    font-size: 16px;
+    color: #a0aec0;
+  }
+  .desc {
+    font-size: 17px;
+    color: #4a5568;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    padding: 18px 0;
+    border-top: 1px solid #e2e8f0;
+    margin-bottom: 16px;
+  }
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 17px;
+    color: #2d3748;
+  }
+  .stat-icon {
+    font-size: 20px;
+  }
+  .stat-value {
+    font-weight: 700;
+    color: #1a202c;
+  }
+  .stat-label {
+    color: #a0aec0;
+    font-size: 14px;
+  }
+  .url-row {
+    font-size: 15px;
+    color: #a0aec0;
+    padding-top: 12px;
+    border-top: 1px solid #e2e8f0;
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+    <div class="title">【4K】《黑神话：悟空》最终预告 全面解读！究竟还有多少惊喜？</div>
+    <div class="meta-row">
+      
+      <img class="author-avatar" src="https://i0.hdslb.com/bfs/face/abc123def456.jpg" alt="智能路障" />
+      
+      <span class="author-name">智能路障</span>
+      
+      <span class="meta-divider">·</span>
+      <span class="date-text">2024-08-08</span>
+      
+    </div>
+
+  
+  <div class="cover-section">
+    <img class="cover-img" src="https://i0.hdslb.com/bfs/archive/5edf22a45efc2b8e6f3c3e38a9b0c8b1da123456.jpg" alt="封面" />
+    <div class="cover-overlay">
+      
+      <span class="duration-tag">18:42</span>
+      
+      
+      <span class="partition-tag">单机游戏</span>
+      
+    </div>
+  </div>
+  
+
+  <div class="info-section">
+
+
+    
+    <div class="desc">从第一支预告到现在，我们已经等了四年。这支最终预告里到底藏了多少东西？让我一一拆解。</div>
+    
+
+    <div class="stats-grid">
+      
+      <div class="stat-item">
+        <span class="stat-icon">▶</span>
+        <span class="stat-value">128.5万</span>
+        <span class="stat-label">播放</span>
+      </div>
+      
+      
+      <div class="stat-item">
+        <span class="stat-icon">💬</span>
+        <span class="stat-value">3.2万</span>
+        <span class="stat-label">弹幕</span>
+      </div>
+      
+      <div class="stat-item">
+        <span class="stat-icon">👍</span>
+        <span class="stat-value">12.1万</span>
+        <span class="stat-label">点赞</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">🪙</span>
+        <span class="stat-value">8.1万</span>
+        <span class="stat-label">投币</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">⭐</span>
+        <span class="stat-value">5.6万</span>
+        <span class="stat-label">收藏</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">🔄</span>
+        <span class="stat-value">2.3万</span>
+        <span class="stat-label">转发</span>
+      </div>
+    </div>
+
+    
+    <div class="url-row">https://www.bilibili.com/video/BV1xx411c7mD</div>
+    
+  </div>
+</div>
+</body>
+</html>
+</div>
+<hr style="margin:30px 0;border-color:#e2e8f0">
+
+</body>
+</html>
