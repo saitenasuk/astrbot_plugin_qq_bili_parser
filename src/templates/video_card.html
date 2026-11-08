@@ -56,6 +56,28 @@
     border-radius: 8px;
     font-size: 40px;
   }
+  .fans-text {
+    font-size: 38px;
+    color: #757c85;
+    white-space: nowrap;
+  }
+  .overlay-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    margin-left: auto;
+  }
+  .online-tag {
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
   .info-section {
     padding: 24px 24px 28px;
   }
@@ -88,6 +110,15 @@
     display: flex;
     flex-direction: column;  
     align-items: flex-start; 
+    flex: 1;
+    min-width: 0;
+  }
+  .name-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
   }
   .author-name {
     font-size: 46px;
@@ -115,7 +146,7 @@
   }
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); 
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px 24px;        
     padding: 18px 24px; 
     /* justify-items: center; */
@@ -129,6 +160,11 @@
     gap: 5px;
     font-size: 42px;
     color: #2d3748;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .stat-item > span {
+    flex: none;
   }
   .stat-icon {
     font-size: 42px;
@@ -151,7 +187,12 @@
     <img class="author-avatar" src="{{ author_face }}" alt="{{ author_name }}" />
     {% endif %}
     <div class="meta-divider">
-      <span class="author-name">{{ author_name }}</span>
+      <div class="name-row">
+        <span class="author-name">{{ author_name }}</span>
+        {% if fans_text %}
+        <span class="fans-text">{{ fans_text }}关注</span>
+        {% endif %}
+      </div>
       {% if pubdate %}
       <span class="date-text">{{ pubdate }}</span>
       {% endif %}
@@ -164,9 +205,14 @@
       {% if duration %}
       <span class="duration-tag">{{ duration }}</span>
       {% endif %}
-      {% if extra.tname %}
-      <span class="partition-tag">{{ extra.tname }}</span>
-      {% endif %}
+      <div class="overlay-right">
+        {% if extra.tname %}
+        <span class="partition-tag">{{ extra.tname }}</span>
+        {% endif %}
+        {% if online_text %}
+        <span class="online-tag">{{ online_text }}人在观看</span>
+        {% endif %}
+      </div>
     </div>
   </div>
   {% endif %}

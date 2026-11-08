@@ -5,6 +5,7 @@ B站 API 调用模块
 所有函数均返回统一结构化的数据。
 """
 
+import asyncio
 import logging
 import re
 from dataclasses import dataclass, field
@@ -62,6 +63,10 @@ class BiliResult:
     # 直播专用
     live_status: int = 0     # 0=未开播 1=直播中 2=轮播中
 
+    # 实时在线人数（视频「x人正在看」）与 UP主粉丝数
+    online_text: str = ""    # 已格式化的展示文本，空串表示不展示
+    fans_text: str = ""      # UP主粉丝数展示文本，空串表示不展示
+
     def to_dict(self) -> dict:
         """转为模板渲染用的 dict，所有字段都格式化好了"""
         return {
@@ -84,6 +89,8 @@ class BiliResult:
             "stat_reply": _format_number(self.stat_reply),
             "live_status": self.live_status,
             "live_status_text": _get_live_status_text(self.live_status),
+            "online_text": self.online_text,
+            "fans_text": self.fans_text,
             "extra": self.extra,
             "has_cover": bool(self.cover),
             "has_desc": bool(self.desc),
@@ -162,6 +169,74 @@ def _resolve_b23_from_url(short_url: str) -> str | None:
     return m.group(1) if m else None
 
 
+# ── 实时在线人数 ──────────────────────────────────────────
+
+async def _fetch_video_online(bvid: str, cid: int, user_agent: str = DEFAULT_UA) -> str:
+    """
+    获取视频「x人正在看」的实时在线人数
+
+    API: https://api.bilibili.com/x/player/online/total
+    返回 B站 页面上原样展示的文本（大数会被截断成 "1000+"），失败返回空串。
+    """
+    if not bvid or not cid:
+        return ""
+
+    url = f"https://api.bilibili.com/x/player/online/total?bvid={bvid}&cid={cid}"
+    headers = _build_headers(user_agent)
+    headers["Referer"] = f"https://www.bilibili.com/video/{bvid}"
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                if resp.status != 200:
+                    return ""
+                data = await resp.json()
+    except Exception as e:
+        logger.debug(f"[BiliParser] 在线人数获取失败: {e}")
+        return ""
+
+    if data.get("code") != 0:
+        return ""
+
+    payload = data.get("data") or {}
+    # 站方开关关闭时不展示
+    if not (payload.get("show_switch") or {}).get("total", True):
+        return ""
+
+    return str(payload.get("total") or "")
+
+
+async def _fetch_fans(mid: int, user_agent: str = DEFAULT_UA) -> str:
+    """
+    获取 UP主粉丝数
+
+    API: https://api.bilibili.com/x/relation/stat?vmid={mid}
+    失败返回空串（不展示粉丝标签）。
+    """
+    if not mid:
+        return ""
+
+    url = f"https://api.bilibili.com/x/relation/stat?vmid={mid}"
+    headers = _build_headers(user_agent)
+    headers["Referer"] = f"https://space.bilibili.com/{mid}"
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                if resp.status != 200:
+                    return ""
+                data = await resp.json()
+    except Exception as e:
+        logger.debug(f"[BiliParser] 粉丝数获取失败: {e}")
+        return ""
+
+    if data.get("code") != 0:
+        return ""
+
+    follower = (data.get("data") or {}).get("follower", 0) or 0
+    return _format_number(follower) if follower > 0 else ""
+
+
 # ── 各类型 API 调用函数 ───────────────────────────────────
 
 async def fetch_video(bvid_or_aid: str, user_agent: str = DEFAULT_UA) -> BiliResult | None:
@@ -170,7 +245,9 @@ async def fetch_video(bvid_or_aid: str, user_agent: str = DEFAULT_UA) -> BiliRes
 
     API: https://api.bilibili.com/x/web-interface/view
     """
-    url = f"https://api.bilibili.com/x/web-interface/view?bvid={bvid_or_aid}"
+    # 纯数字 = av 号（aid 参数），其余 = BV 号（bvid 参数，B站接受不带 BV 前缀的写法）
+    key = "aid" if str(bvid_or_aid).isdigit() else "bvid"
+    url = f"https://api.bilibili.com/x/web-interface/view?{key}={bvid_or_aid}"
     headers = _build_headers(user_agent)
 
     try:
@@ -188,6 +265,12 @@ async def fetch_video(bvid_or_aid: str, user_agent: str = DEFAULT_UA) -> BiliRes
         video = data["data"]
         stat = video.get("stat", {})
         owner = video.get("owner", {})
+        bvid = video.get("bvid", bvid_or_aid)
+
+        online_text, fans_text = await asyncio.gather(
+            _fetch_video_online(bvid, video.get("cid", 0), user_agent),
+            _fetch_fans(owner.get("mid", 0), user_agent),
+        )
 
         return BiliResult(
             link_type="video",
@@ -199,7 +282,7 @@ async def fetch_video(bvid_or_aid: str, user_agent: str = DEFAULT_UA) -> BiliRes
             desc=video.get("desc", ""),
             duration=video.get("duration", 0),
             pubdate=video.get("pubdate", 0),
-            url=f"https://www.bilibili.com/video/{video.get('bvid', bvid_or_aid)}",
+            url=f"https://www.bilibili.com/video/{bvid}",
             stat_view=stat.get("view", 0),
             stat_danmaku=stat.get("danmaku", 0),
             stat_like=stat.get("like", 0),
@@ -207,6 +290,8 @@ async def fetch_video(bvid_or_aid: str, user_agent: str = DEFAULT_UA) -> BiliRes
             stat_favorite=stat.get("favorite", 0),
             stat_share=stat.get("share", 0),
             stat_reply=stat.get("reply", 0),
+            online_text=online_text,
+            fans_text=fans_text,
             extra={"cid": video.get("cid", 0), "tname": video.get("tname", "")},
         )
     except Exception as e:
