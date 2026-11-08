@@ -1,7 +1,7 @@
 name: astrbot_plugin_qq_bili_parser # 插件的唯一识别名
 display_name: B站链接解析插件 # 插件的显示名称
 desc: "解析 QQ 群消息中的 B站链接（视频/直播/番剧/专栏/音频/动态/空间），自动渲染为精美图片卡片并回复" # 插件简短描述
-version: v1.0.0 # 插件版本号
+version: v1.1.0 # 插件版本号
 author: saitenasuk # 作者
 astrbot_version: ">=4.25.1"
 support_platforms:
